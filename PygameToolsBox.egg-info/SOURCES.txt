@@ -1,0 +1,11 @@
+LICENSE
+README.md
+pyproject.toml
+PygameToolsBox/__init__.py
+PygameToolsBox/parallax_bg.py
+PygameToolsBox/spritesheet.py
+PygameToolsBox.egg-info/PKG-INFO
+PygameToolsBox.egg-info/SOURCES.txt
+PygameToolsBox.egg-info/dependency_links.txt
+PygameToolsBox.egg-info/requires.txt
+PygameToolsBox.egg-info/top_level.txt
