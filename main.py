@@ -1,43 +1,23 @@
-from pathlib import Path
+import time
 
 import pygame
-from pygame import Color, Surface
-
-from parallax_bg import ParallaxBackground
-from spritesheet import SpriteSheet
+from pathlib import Path
 
 pygame.init()
-win = pygame.display.set_mode((800, 447))
-clock = pygame.time.Clock()
-sprites = SpriteSheet(Path("chess_set.png"), 90, 90, 2, 5)
-background = ParallaxBackground()
-background.add_background(Path("bg0.png"))
-background.add_background(Path("bg1.png"))
-background.add_background(Path("bg2.png"))
 
-run = True
-while run:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
+win = pygame.display.set_mode((800,800))
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
-        background.update(-1)
-    elif keys[pygame.K_RIGHT]:
-        background.update(1)
-    else:
-        background.update(0)
+from PygameToolsBox.spritesheet import SpriteSheet
 
-    clock.tick(60)
-    win.fill((255,255,255))
+sprite_file = Path( "sprites.png").resolve()
+sprites = SpriteSheet(sprite_file, 60, 60, 4, 4)
 
-    background.draw(win)
+range = sprites.get_sprite_range((2, 0), (3, 3))
 
-#    x = 0
-#    sprite:Surface
-#    for sprite in sprites.get_sprite_list():
-#        win.blit(sprite, (x,0))
-#        x += sprite.get_width()
 
-    pygame.display.update()
+for i, image in enumerate(range):
+    win.blit(image, (i * 60, 0))
+
+pygame.display.update()
+
+pygame.time.delay(10000)
