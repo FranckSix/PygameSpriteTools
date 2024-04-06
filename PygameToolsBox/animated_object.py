@@ -56,7 +56,7 @@ class AnimatedObject:
         """
         Automate animation of game object, You can specify different action to object and switch
         between these actions to switch animation sequence.
-        :param images: All the image nedded for the object
+        :param images: All the image needed for the object
         :param cooling: Frames spacing between switching image
         """
         self.images = [MaskImage(i) for i in images]
@@ -124,7 +124,7 @@ class AnimatedObject:
         :param other: The other object (sprite) to test collision
         :return: True if the object is colliding with another object else return False
         """
-        self._current_image.rect.center = self._pos
+        self._current_image.rect.center = (self._pos.x, self.pos.y)
         if self._current_image and pygame.sprite.collide_rect(self._current_image, other):
             if pygame.sprite.collide_mask(self._current_image, other):
                 return True
@@ -136,5 +136,5 @@ class AnimatedObject:
         :param win: Surface to draw
         """
         if self._current_image:
-            self._current_image.rect.center = self._pos
+            self._current_image.rect.center = (self._pos.x, self.pos.y)
             win.blit(self._current_image.image, self._current_image.rect)
