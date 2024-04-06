@@ -68,7 +68,7 @@ class AnimatedObject:
     def get_action(self):
         return self._current_action.name
 
-    @property.getter
+    @property
     def rect(self) -> Rect:
         return self._current_image.rect
 
