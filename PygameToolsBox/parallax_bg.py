@@ -1,13 +1,13 @@
-import math
 from pathlib import Path
 
 import pygame.image
 from pygame import Surface, Rect
 
 
-class Background:
-    def __init__(self, image: Surface):
+class _Background:
+    def __init__(self, image: Surface, offset_y: int):
         self.image = image
+        self.offset_y = offset_y
         self.width = image.get_width()
         self.height = image.get_height()
         self.scroll = 0
@@ -40,15 +40,17 @@ class ParallaxBackground:
     """
 
     def __init__(self):
-        self._backgrounds = list[Background]()
+        self._backgrounds = list[_Background]()
         self.speed: int = 5
 
-    def add_background(self, image: Path):
+    def add_background(self, image: Path, offset_y: int = 0):
         """
-        :param image: Image source path with filename
+        Params:
+            image: Image source path with filename
+            offset_y: Shifting the image in vertical position
         """
 
-        image = Background(pygame.image.load(image).convert_alpha())
+        image = _Background(pygame.image.load(image).convert_alpha(), offset_y)
         image.speed += len(self._backgrounds) * 0.2
         self._backgrounds.append(image)
 
@@ -70,7 +72,7 @@ class ParallaxBackground:
             Each image scrolls faster and faster as it nears the top of the stack
         """
         for i, image in enumerate(self._backgrounds):
-            rect = Rect(image.scroll * image.speed, 0, image.scroll + image.width, image.height)
+            rect = Rect(image.scroll * image.speed, 0 + image.offset_y, image.scroll + image.width, image.height)
             win.blit(image.image, rect)  # Dessiner l'image avec le scrolling
             image.cover_left(win)
             image.cover_right(win)

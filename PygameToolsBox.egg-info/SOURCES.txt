@@ -2,6 +2,8 @@ LICENSE
 README.md
 pyproject.toml
 PygameToolsBox/__init__.py
+PygameToolsBox/animated_object.py
+PygameToolsBox/mask_image.py
 PygameToolsBox/parallax_bg.py
 PygameToolsBox/spritesheet.py
 PygameToolsBox.egg-info/PKG-INFO
