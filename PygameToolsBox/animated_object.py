@@ -66,7 +66,7 @@ class AnimatedObject:
             self._current_action.start()
 
     def get_action(self):
-        return self._current_action.name
+        return self._current_action.name if self._current_action else None
 
     @property
     def rect(self) -> Rect:
