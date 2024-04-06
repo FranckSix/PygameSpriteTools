@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pygame
-from pygame import Rect, Color, Surface
+from pygame import Rect, Color, Surface, Vector2
 
 from PygameToolsBox.animated_object import AnimatedObject, ANIMATION_END
 from PygameToolsBox.mask_image import MaskImage
@@ -21,6 +21,7 @@ player.add_action("begin_slide", 0, 16, 17)
 player.add_action("end_slide", 0, 17, 20)
 player.add_action("dead", -1, 0, 0)
 player.set_action("run")
+player.update(Vector2(100, 100))
 bullet = MaskImage(Surface((10, 10)))
 
 run = True
@@ -51,8 +52,8 @@ while run:
 
     win.fill(Color(0, 0, 0))
 
-    rect = player.rect
-    player.update(Rect(100, 100, 60, 60))
+    rect = player.pos
+    player.update(player.pos)
     player.draw(win)
 
     bullet.rect.center = pygame.mouse.get_pos()

@@ -1,4 +1,4 @@
-**This librairy contain so far 2 classes**
+**This librairy contain so far 3 classes**
 
 _ParallaxBackground_ : 
 
@@ -18,21 +18,21 @@ speed the closer you get to the top of the stack.
      # ex: background.speed = 4
     
      while(run):
-         for event in pygame.event.get():
-             if event.type == pygame.QUIT:
-                 run = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
 
-    keys = pygame.key.get_pressed()
-    # -1 for left scrolling or 1 for right scrolling
-    if keys[pygame.K_LEFT]:
-        background.update(-1)
-    elif keys[pygame.K_RIGHT]:
-        background.update(1)
-    else:
-        background.update(0)
-
-    background.draw(win)
-    pygame.display.update()`
+        keys = pygame.key.get_pressed()
+        # -1 for left scrolling or 1 for right scrolling
+        if keys[pygame.K_LEFT]:
+            background.update(-1)
+        elif keys[pygame.K_RIGHT]:
+            background.update(1)
+        else:
+            background.update(0)
+    
+        background.draw(win)
+        pygame.display.update()`
 
 _SpriteSheet_ :
 
@@ -52,10 +52,42 @@ sprite sheet dna an iterable list
             if event.type == pygame.QUIT:
                 run = False
 
-    x = 0
-    sprite:Surface
-    for sprite in sprites.get_sprite_list():
-        win.blit(sprite, (x,0))
-        x += sprite.get_width()
+        x = 0
+        sprite:Surface
+        for sprite in sprites.get_sprite_list():
+            win.blit(sprite, (x,0))
+            x += sprite.get_width()
+    
+        pygame.display.update()
 
-    pygame.display.update()
+__AnimatedObject_ :
+
+Automate process for animated objects. With the help of a SpriteSheet, You can define set of action
+and define set of image for animation. To switch between animation sequence use the method to set action.
+When an animation ended an event triggered. The object is also be able to detect collision with another sprite.
+
+**Example:**
+
+    win = pygame.display.set_mode((800, 447))
+
+    #for a sprite sheet of images 90px X 90px on 2 rows and 5 columns
+    sprites = SpriteSheet(Path("chess_set.png"), 90, 90, 2, 5)
+    player = AnimatedObject(sprites.get_sprite_list(), 1)
+    player.add_action("run", -1, 8, 15)
+    player.add_action("jump", 0, 1,7)
+    player.add_action("begin_slide", 0, 16, 17)
+    player.add_action("end_slide", 0, 17, 20)
+    player.add_action("dead", -1, 0, 0)
+    player.set_action("run")
+
+    while(run):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+        pos = player.pos
+        #Adjust position to new coordinates
+        player.update(player.pos)
+        player.draw(win)
+
+        pygame.display.update()

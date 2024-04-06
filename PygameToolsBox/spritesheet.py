@@ -7,8 +7,8 @@ from pygame import Surface
 class SpriteSheet:
     def __init__(self,
                  sprite_sheet_path: Path,
-                 sprite_size_x: int,
-                 sprite_size_y: int,
+                 sprite_size_x: float,
+                 sprite_size_y: float,
                  nb_rows: int,
                  nb_cols: int,
                  alpha: bool = True):
@@ -80,7 +80,7 @@ class SpriteSheet:
         the start and end is included into set
         the index ins 0 based range
         :param start: (row, col) to start
-        :param end: (row, col) to end
+        :param stop: (row, col) to end
         :return:
         """
         index_start = start[0] * 100 + start[1]
