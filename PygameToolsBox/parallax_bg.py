@@ -33,9 +33,9 @@ class _Background:
 
 class ParallaxBackground:
     """
-    This class allows you to manage background images and apply a parallax effect.
-    We must add the background images starting with the one that will be most in the background.
-    Then we stack the images to finish with the one on top.
+    This class allows you to manage background _images and apply a parallax effect.
+    We must add the background _images starting with the one that will be most in the background.
+    Then we stack the _images to finish with the one on top.
     By default, the speed is adjusted to 5, but it can be changed
     """
 
@@ -68,7 +68,7 @@ class ParallaxBackground:
     def draw(self, win: Surface):
         """
         Params win (pygame.Surface):
-            The object takes care of stacking the background images in the order of insertion.
+            The object takes care of stacking the background _images in the order of insertion.
             Each image scrolls faster and faster as it nears the top of the stack
         """
         for i, image in enumerate(self._backgrounds):

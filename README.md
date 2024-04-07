@@ -64,7 +64,7 @@ __AnimatedObject_ :
 
 Automate process for animated objects. With the help of a SpriteSheet, You can define set of action
 and define set of image for animation. To switch between animation sequence use the method to set action.
-When an animation ended an event triggered. The object is also be able to detect collision with another sprite.
+When an animation ended an event triggered.
 
 **Example:**
 

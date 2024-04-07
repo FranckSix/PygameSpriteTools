@@ -1,8 +1,7 @@
-import itertools
-
-import pygame.sprite
-from pygame import Surface, Rect, Vector2
+import pygame
+from pygame import Surface, Rect
 from pygame.event import Event
+from pygame.sprite import Sprite
 
 from PygameToolsBox.mask_image import MaskImage
 
@@ -51,7 +50,7 @@ class ActionSequence:
         return self.images_index[self.iteration]
 
 
-class AnimatedObject:
+class AnimatedObject(Sprite):
     def __init__(self, images: [Surface], cooling: int):
         """
         Automate animation of game object, You can specify different action to object and switch
@@ -59,13 +58,30 @@ class AnimatedObject:
         :param images: All the image needed for the object
         :param cooling: Frames spacing between switching image
         """
-        self.images = [MaskImage(i) for i in images]
+        super().__init__()
+        self._images = [MaskImage(i) for i in images]
         self._actions = dict[str, ActionSequence]()
         self._current_action: ActionSequence | None = None
-        self._current_image = self.images[0]
-        self.cooling = cooling
-        self.cool_down = cooling
-        self._pos = Vector2(0, 0)
+        self._cooling = cooling
+        self._cool_down = cooling
+        self._image_index = 0
+        self.rect = True
+
+    @property
+    def image(self) -> Surface:
+        return self._images[self._image_index].image
+
+    @property
+    def mask(self) -> Surface:
+        return self._images[self._image_index].mask
+
+    @property
+    def rect(self) -> Rect:
+        return self._images[self._image_index].rect
+
+    @rect.setter
+    def rect(self, value: Rect):
+        self._images[self._image_index].rect = value
 
     def add_action(self, name: str, repeat: int, index_start: int, index_end: int):
         """
@@ -94,47 +110,23 @@ class AnimatedObject:
         """
         return self._current_action.name if self._current_action else None
 
-    @property
-    def pos(self) -> Vector2:
-        """
-        :return: Rectangle of the current position of the sprite
-        """
-        return self._pos
-
-    def update(self, pos: Vector2):
+    def update(self, pos: Rect):
         """
         Call every frame for adjust animation and object position
         :param pos: New position for the sprite
         """
-        self._pos = pos
+        self.rect = pos
 
-        if self.cool_down > 0:
-            self.cool_down -= 1
+        if self._cool_down > 0:
+            self._cool_down -= 1
             return
 
-        self.cool_down = self.cooling
-        action_sequence = self._current_action.get_next()
-        if action_sequence is not None:
-            self._current_image = self.images[action_sequence]
-        else:
-            self._current_image = None
-
-    def is_collide_with(self, other: MaskImage):
-        """
-        :param other: The other object (sprite) to test collision
-        :return: True if the object is colliding with another object else return False
-        """
-        self._current_image.rect.center = (self._pos.x, self.pos.y)
-        if self._current_image and pygame.sprite.collide_rect(self._current_image, other):
-            if pygame.sprite.collide_mask(self._current_image, other):
-                return True
-        return False
+        self._cool_down = self._cooling
+        self._image_index = self._current_action.get_next()
 
     def draw(self, win: Surface):
         """
         Display object to the screen
         :param win: Surface to draw
         """
-        if self._current_image:
-            self._current_image.rect.center = (self._pos.x, self.pos.y)
-            win.blit(self._current_image.image, self._current_image.rect)
+        win.blit(self.image, self.rect)
