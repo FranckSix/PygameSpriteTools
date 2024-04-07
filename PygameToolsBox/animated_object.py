@@ -65,7 +65,6 @@ class AnimatedObject(Sprite):
         self._cooling = cooling
         self._cool_down = cooling
         self._image_index = 0
-        self.rect = True
 
     @property
     def image(self) -> Surface:
