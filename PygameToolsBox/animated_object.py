@@ -109,13 +109,11 @@ class AnimatedObject(Sprite):
         """
         return self._current_action.name if self._current_action else None
 
-    def update(self, pos: Rect):
+    def update(self):
         """
         Call every frame for adjust animation and object position
         :param pos: New position for the sprite
         """
-        self.rect = pos
-
         if self._cool_down > 0:
             self._cool_down -= 1
             return
