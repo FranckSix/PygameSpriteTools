@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: PygameToolsBox
-Version: 1.1.4
+Version: 1.2.0
 Summary: Library for manage sprite sheet, and pallax background
 Author-email: FranckSix <francksix@gmail.com>
 License: MIT
@@ -101,8 +101,9 @@ When an animation ended an event triggered.
             if event.type == pygame.QUIT:
                 run = False
 
-        pos = player.pos
-        #Adjust position to new coordinates
+        #Adjust position to new coordinates (EX: move to the right)
+        player.pos.x += .2
+        
         player.update(player.pos)
         player.draw(win)
 
