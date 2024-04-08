@@ -64,7 +64,7 @@ while run:
 
     win.fill(Color(0, 0, 0))
 
-    rect = player.rect
+    player.pos.x += 1
     player.update()
     player.draw(win)
 

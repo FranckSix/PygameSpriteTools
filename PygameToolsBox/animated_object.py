@@ -1,5 +1,7 @@
+from typing import Tuple
+
 import pygame
-from pygame import Surface, Rect
+from pygame import Surface, Rect, Mask
 from pygame.event import Event
 from pygame.sprite import Sprite
 
@@ -31,7 +33,7 @@ class ActionSequence:
         self.repeated = self.repeat
         self.iteration = 0
 
-    def get_next(self) -> int | None:
+    def get_next(self) -> int:
         """
         Go to next index image
         """
@@ -65,22 +67,15 @@ class AnimatedObject(Sprite):
         self._cooling = cooling
         self._cool_down = cooling
         self._image_index = 0
+        self.pos: Rect = Rect(0,0,0,0)
+        self._set_image()
 
-    @property
-    def image(self) -> Surface:
-        return self._images[self._image_index].image
-
-    @property
-    def mask(self) -> Surface:
-        return self._images[self._image_index].mask
-
-    @property
-    def rect(self) -> Rect:
-        return self._images[self._image_index].rect
-
-    @rect.setter
-    def rect(self, value: Rect):
-        self._images[self._image_index].rect = value
+    def _set_image(self):
+        curent = self._images[self._image_index]
+        self.image = curent.image
+        self.mask = curent.mask
+        self.rect = curent.rect
+        self.rect.topleft = self.pos.topleft
 
     def add_action(self, name: str, repeat: int, index_start: int, index_end: int):
         """
@@ -116,10 +111,11 @@ class AnimatedObject(Sprite):
         """
         if self._cool_down > 0:
             self._cool_down -= 1
-            return
+        else:
+            self._cool_down = self._cooling
+            self._image_index = self._current_action.get_next()
 
-        self._cool_down = self._cooling
-        self._image_index = self._current_action.get_next()
+        self._set_image()
 
     def draw(self, win: Surface):
         """

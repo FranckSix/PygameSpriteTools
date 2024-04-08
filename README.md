@@ -85,8 +85,9 @@ When an animation ended an event triggered.
             if event.type == pygame.QUIT:
                 run = False
 
-        pos = player.pos
-        #Adjust position to new coordinates
+        #Adjust position to new coordinates (EX: move to the right)
+        player.pos.x += .2
+        
         player.update(player.pos)
         player.draw(win)
 
