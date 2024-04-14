@@ -11,7 +11,8 @@ class SpriteSheet:
                  sprite_size_y: float,
                  nb_rows: int,
                  nb_cols: int,
-                 alpha: bool = True):
+                 alpha: bool = True,
+                 scale: float = 1):
         """
         :param sprite_sheet_path:
             Path and file of the spead sheet
@@ -32,12 +33,17 @@ class SpriteSheet:
             Is the sprite sheet contains a canal alpha for transparency. Otherwise,
             you may use the property "set_colorkey" from the sub image
         """
+        self.scale = scale
         if alpha:
             self._sprite_sheet = pygame.image.load(sprite_sheet_path).convert_alpha()
         else:
             self._sprite_sheet = pygame.image.load(sprite_sheet_path).convert()
-        self._sprite_size_x = sprite_size_x
-        self._sprite_size_y = sprite_size_y
+
+        if scale != 1:
+            self._sprite_sheet = pygame.transform.scale_by(self._sprite_sheet, scale)
+
+        self._sprite_size_x = sprite_size_x * scale
+        self._sprite_size_y = sprite_size_y * scale
         self._rows = nb_rows
         self._cols = nb_cols
         self._alpha = alpha

@@ -24,14 +24,16 @@ class ActionSequence:
         self.repeat = repeat
         self.images_index = images_index
         self.iteration = 0
-        self.repeated = 0
+        self.repeat_pending = 0
+        self.stopped = True
 
     def start(self):
         """
         Initialize sequence animation. Start from initial settings
         """
-        self.repeated = self.repeat
+        self.repeat_pending = self.repeat
         self.iteration = 0
+        self.stopped = False
 
     def get_next(self) -> int:
         """
@@ -40,14 +42,15 @@ class ActionSequence:
         self.iteration += 1
 
         if self.iteration >= len(self.images_index):
-            if self.repeated > 0:
-                self.repeated -= 1
+            if self.repeat_pending > 0:
+                self.repeat_pending -= 1
                 self.iteration = 0
-            elif self.repeated < 0:
+            elif self.repeat_pending < 0:
                 self.iteration = 0
             else:
                 pygame.event.post(Event(ANIMATION_END))
-                self.iteration = len(self.images_index) - 1
+                self.stopped = True
+                self.iteration = -1
 
         return self.images_index[self.iteration]
 
@@ -111,11 +114,10 @@ class AnimatedObject(Sprite):
         """
         if self._cool_down > 0:
             self._cool_down -= 1
-        else:
+        elif not self._current_action.stopped:
             self._cool_down = self._cooling
             self._image_index = self._current_action.get_next()
-
-        self._set_image()
+            self._set_image()
 
     def draw(self, win: Surface):
         """
